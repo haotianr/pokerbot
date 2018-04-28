@@ -88,11 +88,11 @@ def csv_input_fn(csv_path, batch_size):
     return dataset
 
 def main():
-	train_file_list = glob.glob('card_*.png')
+	train_file_list = glob.glob('..\card_*.png')
 	for name in train_file_list:
 		#load, decode and crop
 		
-	test_file_list = glob.glob('card_1*.png')
+	test_file_list = glob.glob('..\card_1*.png')
 	print(test_file_list)
 	
 if __name__ == '__main__':

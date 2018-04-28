@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 from scipy import misc
 import glob
 
@@ -89,11 +90,24 @@ def csv_input_fn(csv_path, batch_size):
 
 def main():
 	train_file_list = glob.glob('..\card_*.png')
-	for name in train_file_list:
+	a = [tf.image.resize_image_with_crop_or_pad(tf.image.decode_png(x, 3), 57, 57) for x in train_file_list]
+	tf.estimator.inputs.numpy_input_fn(
+		np.array(a),
+		np.array([x[8] for x in train_file_list]),
+		batch_size = 128,
+		num_epochs = 3,
+		shuffle = True,
+		)
+		
+	#for name in train_file_list:
 		#load, decode and crop
+		#image_full_tensor = tf.image.decode_png(name, 3)
+		#image_tensor = tf.image.resize_image_with_crop_or_pad(image_full_tensor, 57, 57)
+		
+		#print(image_tensor.shape)
+	
 		
 	test_file_list = glob.glob('..\card_1*.png')
-	print(test_file_list)
 	
 if __name__ == '__main__':
 	main()

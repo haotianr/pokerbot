@@ -77,16 +77,21 @@ def card_classify_fn(features, labels, mode):
 		mode=mode, loss=loss, eval_metrics_ops=eval_metrics_ops)
 					
 def main(argv):
+	print(data_loader.train_input_fn)
 	args = parser.parse_args(argv[1:])
 
 	# Create Estimator
 	classifier = tf.estimator.Estimator(
 		model_fn = card_classify_fn, model_dir="D:\TF\card")
 
+	tensors_to_log = {"probabilities": "softmax_tensor"}
+	logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=50)
+
 	# Train the Model.
 	classifier.train(
-		input_fn=data_loader.train_input_fn,
-		steps=args.train_steps)
+		input_fn=lambda: data_loader.train_input_fn,
+		steps=args.train_steps,
+		hooks=[logging_hook])
 
 	# TODO: create real eval and Evaluate the model.
 	eval_result = classifier.evaluate(
